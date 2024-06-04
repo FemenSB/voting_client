@@ -1,15 +1,26 @@
+:root {
+  --candidate-width: 300px;
+}
+
 #candidate-list {
   height: 100%;
-  margin: auto;
-  width: 300px;
+  margin: 10px auto;
+  width: var(--candidate-width);
 }
 
 #candidate-container {
   background-color: #27272A;
   border-radius: 4px;
   color: #FFFFFF;
-  margin: 10px 0;
+  margin-bottom: 10px;
   padding: 8px;
   text-align: center;
   user-select: none;
+  width: var(--candidate-width);
+}
+
+#candidate-container:not(:active) {
+  transition-duration: 200ms;
+  transition-property: left, top;
+  transition-timing-function: ease-out;
 }
