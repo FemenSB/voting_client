@@ -1,6 +1,6 @@
 import './candidate_list.style.css'
 
-import { DragEvent, useEffect, useRef } from 'react';
+import { DragEvent, useRef, useState } from 'react';
 
 const DROP_EFFECT = 'move';
 
@@ -48,28 +48,25 @@ type CandidateListProps = {
 
 export default function CandidateList({ candidates }: CandidateListProps) {
   const candidateElementsRefs = useRef<Array<HTMLDivElement|null>>([]);
+  const [orderedCandidates, setOrderedCandidates] = useState(candidates);
   let dragElement: HTMLElement;
   let dragElementIndex: number;
   let rectsBeforeDrag: DOMRect[];
   let dragOffset: Point;
 
-  useEffect(() => {
+  function onDragStart(e: DragEvent<HTMLDivElement>) {
     document.addEventListener('dragover',
         onDragOver as unknown as EventListener);
-    return () => {
-      document.removeEventListener('dragover',
-          onDragOver as unknown as EventListener);
-    }
-  }, []);
-
-  function onDragStart(e: DragEvent<HTMLDivElement>) {
-    dragElement = e.target as HTMLElement;
-    dragElementIndex = candidateElementsRefs.current.findIndex(
-        el => el === dragElement);
-    dragOffset = computeDragOffset(e);
-    rectsBeforeDrag = computeCandidateRects();
+    saveDragStartState();
     removeDragImage(e);
     setDragPointer(e);
+
+    function saveDragStartState() {
+      rectsBeforeDrag = computeCandidateRects();
+      dragElement = e.target as HTMLElement;
+      dragElementIndex = indexAt({ x: e.clientX, y: e.clientY });
+      dragOffset = computeDragOffset(e);
+    }
   }
   
   function computeCandidateRects(): DOMRect[] {
@@ -130,13 +127,40 @@ export default function CandidateList({ candidates }: CandidateListProps) {
             rect.top <= position.y && rect.bottom >= position.y);
   }
 
-  function onDragEnd() {
-    candidateElementsRefs.current.forEach(el => resetPosition(el!));
+  function onDragEnd(e: DragEvent<HTMLDivElement>) {
+    const dropIndex = indexAt({x: e.clientX, y: e.clientY});
+    if (validDropPosition(dropIndex)) {
+      moveDroppedCandidateTo(dropIndex);
+    }
+    resetElementPositions();
+    document.removeEventListener('dragover',
+        onDragOver as unknown as EventListener);
+
+    function validDropPosition(index: number): boolean {
+      return index !== -1;
+    }
+    
+    function moveDroppedCandidateTo(index: number) {
+      const reordered = moveIndexTo(orderedCandidates, dragElementIndex, index);
+      setOrderedCandidates(reordered);
+
+      function moveIndexTo<T>(array: T[], from: number, to: number): T[] {
+        const result = [...array];
+        const movedItem = result[from];
+        result.splice(from, 1);
+        result.splice(to, 0, movedItem);
+        return result;
+      }
+    }
+
+    function resetElementPositions() {
+      candidateElementsRefs.current.forEach(el => resetPosition(el!));
+    }
   }
 
   return (
     <div id='candidate-list'>
-      {candidates.map((name, i) =>
+      {orderedCandidates.map((name, i) =>
         <div id='candidate-container' key={i} draggable
             ref={el => candidateElementsRefs.current[i] = el}
             onDragStart={onDragStart} onDragEnd={onDragEnd}>
