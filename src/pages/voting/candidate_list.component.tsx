@@ -1,8 +1,59 @@
 import './candidate_list.style.css'
 
-import { DragEvent, useRef, useState } from 'react';
+import { assert } from '../../utils/assert';
+import React, { useRef, useState } from 'react';
 
 const DROP_EFFECT = 'move';
+
+type DragEventTypes = React.DragEvent | DragEvent;
+type TouchEventTypes = React.TouchEvent | TouchEvent;
+
+class GenericDragEvent {
+  target: EventTarget | null;
+  clientX: number;
+  clientY: number;
+  private isTouch_: boolean;
+  private originalEvent_: DragEventTypes | TouchEventTypes;
+
+  static fromTouch(event: TouchEventTypes): GenericDragEvent {
+    return new GenericDragEvent(undefined, event);
+  }
+  
+  static fromDrag(event: DragEventTypes): GenericDragEvent {
+    return new GenericDragEvent(event, undefined);
+  }
+
+  private constructor(
+      dragEvent?: DragEventTypes, touchEvent?: TouchEventTypes) {
+    assert(dragEvent || touchEvent,
+        'GenericDragEvent cannot be instantiated witout an event');
+
+    this.originalEvent_ = (dragEvent ?? touchEvent)!;
+    this.target = this.originalEvent_.target;
+    this.isTouch_ = !!touchEvent;
+
+    if (this.isTouch_) {
+      this.clientX = touchEvent!.touches[0]?.clientX
+          || touchEvent!.changedTouches[0].clientX;
+      this.clientY = touchEvent!.touches[0]?.clientY
+          || touchEvent!.changedTouches[0].clientY;
+    } else {
+      this.clientX = dragEvent!.clientX;
+      this.clientY = dragEvent!.clientY;
+    }
+  }
+
+  get dataTransfer() {
+    if (this.isTouch_) {
+      return null;
+    }
+    return (this.originalEvent_ as DragEventTypes).dataTransfer;
+  }
+
+  preventDefault() {
+    this.originalEvent_.preventDefault();
+  }
+};
 
 type Point = {
   x: number;
@@ -26,7 +77,7 @@ function resetPosition(element: HTMLElement) {
   element.style.top = '';
 }
 
-function computeDragOffset(e: DragEvent<HTMLElement>): Point {
+function computeDragOffset(e: GenericDragEvent): Point {
   const draggedRect = (e.target as HTMLElement).getBoundingClientRect();
   return {
     x: draggedRect.left - e.clientX,
@@ -34,12 +85,14 @@ function computeDragOffset(e: DragEvent<HTMLElement>): Point {
   };
 }
 
-function removeDragImage(e: DragEvent<HTMLElement>) {
-  e.dataTransfer.setDragImage(new Image(), 0, 0);
+function removeDragImage(e: GenericDragEvent) {
+  e.dataTransfer?.setDragImage(new Image(), 0, 0);
 }
 
-function setDragPointer(e: DragEvent<HTMLElement>) {
-  e.dataTransfer!.dropEffect = DROP_EFFECT;
+function setDragPointer(e: GenericDragEvent) {
+  if (e.dataTransfer) {
+    e.dataTransfer.dropEffect = DROP_EFFECT;
+  }
 }
 
 type CandidateListProps = {
@@ -54,9 +107,19 @@ export default function CandidateList({ candidates }: CandidateListProps) {
   let rectsBeforeDrag: DOMRect[];
   let dragOffset: Point;
 
-  function onDragStart(e: DragEvent<HTMLDivElement>) {
-    document.addEventListener('dragover',
-        onDragOver as unknown as EventListener);
+  function onDragStart(e: React.DragEvent) {
+    const genericEvent = GenericDragEvent.fromDrag(e);
+    startDrag(genericEvent);
+  }
+
+  function onTouchStart(e: React.TouchEvent) {
+    const genericEvent = GenericDragEvent.fromTouch(e);
+    startDrag(genericEvent)
+  }
+
+  function startDrag(e: GenericDragEvent) {
+    document.addEventListener('dragover', onDragOver);
+    document.addEventListener('touchmove', onTouchMove);
     saveDragStartState();
     removeDragImage(e);
     setDragPointer(e);
@@ -64,7 +127,8 @@ export default function CandidateList({ candidates }: CandidateListProps) {
     function saveDragStartState() {
       rectsBeforeDrag = computeCandidateRects();
       dragElement = e.target as HTMLElement;
-      dragElementIndex = indexAt({ x: e.clientX, y: e.clientY });
+      dragElementIndex = indexAt(
+          {x: e.clientX, y: e.clientY});
       dragOffset = computeDragOffset(e);
     }
   }
@@ -73,14 +137,24 @@ export default function CandidateList({ candidates }: CandidateListProps) {
     return candidateElementsRefs.current.map(el => el!.getBoundingClientRect());
   }
 
-  function onDragOver(e: DragEvent<HTMLDivElement>) {
+  function onDragOver(e: DragEvent) {
+    const genericEvent = GenericDragEvent.fromDrag(e);
+    performDrag(genericEvent);
+  }
+
+  function onTouchMove(e: TouchEvent) {
+    const genericEvent = GenericDragEvent.fromTouch(e);
+    performDrag(genericEvent);
+  }
+
+  function performDrag(e: GenericDragEvent) {
     setPositions(e);
     setDraggedPosition(e);
     setDragPointer(e);
     e.preventDefault();
   }
 
-  function setPositions(e: DragEvent<HTMLDivElement>) {
+  function setPositions(e: GenericDragEvent) {
     const hoveredIndex = indexAt({x: e.clientX, y: e.clientY});
     if (hoveredIndex === -1 || hoveredIndex === dragElementIndex) {
       setOriginalPositions();
@@ -114,7 +188,7 @@ export default function CandidateList({ candidates }: CandidateListProps) {
     }
   }
 
-  function setDraggedPosition(e: DragEvent<HTMLDivElement>) {
+  function setDraggedPosition(e: GenericDragEvent) {
     setPosition(dragElement, {
       x: e.clientX + dragOffset.x,
       y: e.clientY + dragOffset.y
@@ -127,14 +201,24 @@ export default function CandidateList({ candidates }: CandidateListProps) {
             rect.top <= position.y && rect.bottom >= position.y);
   }
 
-  function onDragEnd(e: DragEvent<HTMLDivElement>) {
+  function onDragEnd(e: React.DragEvent) {
+    const genericEvent = GenericDragEvent.fromDrag(e);
+    endDrag(genericEvent);
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    const genericEvent = GenericDragEvent.fromTouch(e);
+    endDrag(genericEvent);
+  }
+
+  function endDrag(e: GenericDragEvent) {
     const dropIndex = indexAt({x: e.clientX, y: e.clientY});
     if (validDropPosition(dropIndex)) {
       moveDroppedCandidateTo(dropIndex);
     }
     resetElementPositions();
-    document.removeEventListener('dragover',
-        onDragOver as unknown as EventListener);
+    document.removeEventListener('dragover', onDragOver);
+    document.removeEventListener('touchmove', onTouchMove);
 
     function validDropPosition(index: number): boolean {
       return index !== -1;
@@ -163,7 +247,8 @@ export default function CandidateList({ candidates }: CandidateListProps) {
       {orderedCandidates.map((name, i) =>
         <div id='candidate-container' key={i} draggable
             ref={el => candidateElementsRefs.current[i] = el}
-            onDragStart={onDragStart} onDragEnd={onDragEnd}>
+            onDragStart={onDragStart} onDragEnd={onDragEnd}
+            onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           {name}
         </div>
       )}
