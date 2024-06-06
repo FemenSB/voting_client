@@ -1,0 +1,31 @@
+#nav-bar {
+  align-items: center;
+  background-color: var(--tini-brand-color);
+  display: flex;
+  padding: 12px;
+}
+
+#nav-bar > * {
+  color: var(--tini-brand-text-color);
+}
+
+#nav-bar-end-container {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  width: 100%;
+}
+
+.nav-bar-button {
+  align-items: center;
+  display: flex;
+  font-weight: var(--tini-font-weight-medium);
+  margin-inline-end: 32px;
+  text-decoration: none;
+}
+
+.nav-bar-button-icon {
+  fill: var(--tini-brand-text-color);
+  margin-inline-end: 8px;
+}

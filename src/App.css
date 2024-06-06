@@ -1,0 +1,25 @@
+:root {
+  /* font weights */
+  --tini-font-weight-bold: 700;
+  --tini-font-weight-medium: 500;
+  --tini-font-weight-regular: 400;
+
+  /* border radii */
+  --tini-border-radius-rounded: 4px;
+
+  /* sizes */
+  --tini-font-size-base: 14px;
+  --tini-font-size-large: 18px;
+
+  /* colors */
+  --tini-brand-color: #0A68FF;
+  --tini-brand-text-color: #FFFFFF;
+  --tini-main-background-color: #FFFFFF;
+  --tini-main-text-color: #27272A;
+  --tini-placeholder-text-color: #808089;
+}
+
+h1 {
+  font-size: var(--tini-font-size-large);
+  font-weight: var(--tini-font-weight-bold);
+}
