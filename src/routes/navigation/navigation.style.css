@@ -23,6 +23,7 @@
   font-weight: var(--tini-font-weight-medium);
   margin-inline-end: 32px;
   text-decoration: none;
+  user-select: none;
 }
 
 .nav-bar-button-icon {
