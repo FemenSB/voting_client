@@ -5,11 +5,14 @@
   --tini-font-weight-regular: 400;
 
   /* border radii */
+  --tini-border-radius-pill: 20px;
   --tini-border-radius-rounded: 4px;
+  --tini-border-radius-rounded-2: 8px;
 
   /* sizes */
   --tini-font-size-base: 14px;
   --tini-font-size-large: 18px;
+  --tini-font-size-medium: 16px;
 
   /* colors */
   --tini-brand-color: #0A68FF;
@@ -22,4 +25,9 @@
 h1 {
   font-size: var(--tini-font-size-large);
   font-weight: var(--tini-font-weight-bold);
+}
+
+.margin-centralize {
+  margin: auto;
+  width: fit-content;
 }

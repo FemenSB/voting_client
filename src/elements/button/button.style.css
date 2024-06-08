@@ -1,0 +1,36 @@
+.button-icon {
+  fill: var(--tini-brand-text-color);
+  margin-inline-end: 8px;
+}
+
+#button-element {
+  align-items: center;
+  background-color: var(--tini-brand-color);
+  border: none;
+  border-radius: var(--tini-border-radius-rounded);
+  color: var(--tini-brand-text-color);
+  display: flex;
+  font-size: var(--tini-font-size-medium);
+  padding: 8px 12px;
+}
+
+#button-element:hover {
+  opacity: .8;
+}
+
+#button-element:active {
+  opacity: .6;
+}
+
+#button-element.pill {
+  border-radius: var(--tini-border-radius-pill);
+}
+
+#button-element.reverse {
+    background-color: var(--tini-brand-text-color);
+    color: var(--tini-brand-color);
+}
+
+#button-element.reverse > .button-icon {
+    fill: var(--tini-brand-color);
+}
