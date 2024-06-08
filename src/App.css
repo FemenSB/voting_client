@@ -22,6 +22,15 @@
   --tini-placeholder-text-color: #808089;
 }
 
+@font-face {
+  font-family: 'Inter';
+  src: url('./fonts/Inter-VariableFont_slnt\,wght.ttf') format('truetype');
+}
+
+:root * {
+  font-family: 'Inter';
+}
+
 h1 {
   font-size: var(--tini-font-size-large);
   font-weight: var(--tini-font-weight-bold);
