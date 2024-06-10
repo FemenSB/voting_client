@@ -1,6 +1,5 @@
-import './candidate_list.style.css'
-
 import { assert } from '../../utils/assert';
+import styles from './candidate_list.style.module.css';
 import React, { useRef, useState } from 'react';
 
 const DROP_EFFECT = 'move';
@@ -243,9 +242,9 @@ export default function CandidateList({ candidates }: CandidateListProps) {
   }
 
   return (
-    <div id='candidate-list'>
+    <div id={styles['candidate-list']}>
       {orderedCandidates.map((name, i) =>
-        <div id='candidate-container' key={i} draggable
+        <div id={styles['candidate']} key={i} draggable
             ref={el => candidateElementsRefs.current[i] = el}
             onDragStart={onDragStart} onDragEnd={onDragEnd}
             onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>

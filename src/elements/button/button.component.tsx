@@ -1,4 +1,4 @@
-import './button.style.css';
+import styles from './button.style.module.css';
 
 import { addClassName, classNames } from '../../utils/class_name';
 import { MouseEventHandler, ReactElement } from 'react';
@@ -13,13 +13,14 @@ type ButtonProps = {
 
 export default function Button(
     { icon, children, onClick, reverse, pill }: ButtonProps) {
-  const buttonIcon = icon ? addClassName(icon, 'button-icon') : null;
+  const buttonIcon = icon ? addClassName(icon, styles['button-icon']) : null;
   const buttonClasses = classNames({
-      reverse: reverse,
-      pill: pill,
+      [styles.reverse]: reverse,
+      [styles.pill]: pill,
   })
   return (
-    <button id='button-element' onClick={onClick} className={buttonClasses}>
+    <button id={styles['button-element']} className={buttonClasses}
+        onClick={onClick}>
       {buttonIcon}
       {children}
     </button>

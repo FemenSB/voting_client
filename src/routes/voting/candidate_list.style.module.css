@@ -6,7 +6,7 @@
   width: var(--candidate-width);
 }
 
-#candidate-container {
+#candidate {
   background-color: #27272A;
   border-radius: 4px;
   box-sizing: border-box;
@@ -18,7 +18,7 @@
   width: var(--candidate-width);
 }
 
-#candidate-container:not(:active) {
+#candidate:not(:active) {
   transition-duration: 200ms;
   transition-property: left, top;
   transition-timing-function: ease-out;

@@ -1,4 +1,4 @@
-import './loading.style.css';
+import styles from './loading.style.module.css';
 
 import { useEffect, useState } from 'react';
 
@@ -18,6 +18,6 @@ export default function Loading() {
   }, []);
   
   return (
-    <h1 id='loading-text'>loading{dots}</h1>
+    <h1 id={styles['loading-text']}>loading{dots}</h1>
   );
 }

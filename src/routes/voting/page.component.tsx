@@ -1,8 +1,7 @@
-import './page.style.css';
-
 import Loading from '../../elements/loading/loading.component';
 import IServerProxyFactory from '../../utils/server_proxy/server_proxy_factory';
 import CandidateList from './candidate_list.component';
+import styles from  './page.style.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -28,7 +27,7 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
   }, []);  
 
   return (
-    <div id='candidate-list-container'>
+    <div id={styles['candidate-list-container']}>
       {initialized ? (<CandidateList candidates={candidates}/>) : <Loading />}
     </div>
   );

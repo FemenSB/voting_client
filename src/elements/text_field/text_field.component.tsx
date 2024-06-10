@@ -1,4 +1,4 @@
-import './text_field.style.css'
+import styles from './text_field.style.module.css'
 import { ChangeEvent, Fragment, useRef, useState, KeyboardEvent } from 'react';
 
 type TextFieldProps = {
@@ -32,18 +32,20 @@ export default function TextField(
   }
 
   return (
-    <div id='text-field-container' className={`${focused ? 'focused' : ''}`}>
-      <div id='text-field-input-container' className={'text-field-section'}
+    <div id={styles['text-field-container']}
+        className={focused ? styles.focused : ''}>
+      <div id={styles['text-field-input-container']}
+          className={styles['text-field-section']}
           onClick={onInputContainerClick}>
-        <input id='text-field-input' placeholder={placeholder}
+        <input id={styles['text-field-input']} placeholder={placeholder}
             onFocus={onInputFocus} onBlur={onInputBlur} autoComplete='off'
             onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
       </div>
       {buttonLabel && (
         <Fragment>
-          <div className="text-field-section-separator" />
-          <div id='text-field-action-button' className='text-field-section' 
-              onClick={onAction}>
+          <div className={styles['text-field-section-separator']} />
+          <div onClick={onAction} id={styles['text-field-action-button']}
+              className={styles['text-field-section']}>
             {buttonLabel}
           </div>
         </Fragment>
