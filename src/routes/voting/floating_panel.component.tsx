@@ -33,7 +33,7 @@ export default function FloatingPanel({ endTime }: SidePanelProps) {
       setRemainingTime(computeRemainingTime(endTime));
       return () => clearInterval(timerInterval.current);
     }, 1000);
-  }, []);
+  }, [endTime]);
 
   function onToggleClick() {
     setShowing(value => !value);
