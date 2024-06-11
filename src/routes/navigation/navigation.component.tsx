@@ -20,20 +20,22 @@ export default function Navigation() {
   return (
     <Fragment>
       <nav id={styles['nav-bar']}>
-        <Link to='/' className={styles['nav-bar-button']}>
-          <h1>Ranked Voting</h1>
-        </Link>
-        <Link to='/guide' className={styles['nav-bar-button']}>
-          <Button reverse icon={<BookIcon />}>
-            Guide
-          </Button>
-        </Link>
-        <Link to='/about' className={styles['nav-bar-button']}>
-          <Button reverse icon={<BuildingIcon />}>
-          About
-          </Button>
-        </Link>
-        <div id={styles['nav-bar-end-container']}>
+        <div id={styles['nav-links']}>
+          <Link to='/' className={styles['nav-bar-button']}>
+            <h1>Ranked Voting</h1>
+          </Link>
+          <Link to='/guide' className={styles['nav-bar-button']}>
+            <Button reverse icon={<BookIcon />}>
+              Guide
+            </Button>
+          </Link>
+          <Link to='/about' className={styles['nav-bar-button']}>
+            <Button reverse icon={<BuildingIcon />}>
+            About
+            </Button>
+          </Link>
+        </div>
+        <div id={styles['nav-bar-container']}>
           <TextField placeholder='vote code' buttonLabel='join'
               onChange={onCodeInputChange} onAction={joinInputCode} />
         </div>

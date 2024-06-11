@@ -5,16 +5,32 @@
   padding: 12px;
 }
 
-#nav-bar > * {
+#nav-links {
+  align-items: center;
+  display: flex;
+}
+
+#nav-links > * {
   color: var(--tini-brand-text-color);
 }
 
-#nav-bar-end-container {
+#nav-bar-container {
   align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: end;
   width: 100%;
+}
+
+@media (max-aspect-ratio: 1) {
+  #nav-bar {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  #nav-bar-container {
+    justify-content: start;
+  }
 }
 
 .nav-bar-button {

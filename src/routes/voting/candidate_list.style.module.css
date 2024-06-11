@@ -3,6 +3,7 @@
 }
 
 #candidate-list {
+  position: relative;
   width: var(--candidate-width);
 }
 

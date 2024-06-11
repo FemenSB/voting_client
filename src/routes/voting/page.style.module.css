@@ -1,11 +1,12 @@
 #candidate-list-container {
   display: flex;
+  position: relative;
   margin-top: 50px;
 }
 
 #side-panel-container {
   --floating-panel-width: 30vw;
-  top: 103px;
+  top: -50px;
   position: absolute;
   pointer-events: none;
   right: 8px;

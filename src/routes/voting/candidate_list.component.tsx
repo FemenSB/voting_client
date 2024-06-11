@@ -84,6 +84,11 @@ function computeDragOffset(e: GenericDragEvent): Point {
   };
 }
 
+function elementCoordinates(element: HTMLElement): Point {
+  const rect = element.getBoundingClientRect();
+  return {x: rect.left, y: rect.top};
+}
+
 function removeDragImage(e: GenericDragEvent) {
   e.dataTransfer?.setDragImage(new Image(), 0, 0);
 }
@@ -100,11 +105,13 @@ type CandidateListProps = {
 
 export default function CandidateList({ candidates }: CandidateListProps) {
   const candidateElementsRefs = useRef<Array<HTMLDivElement|null>>([]);
+  const listElementRef = useRef<HTMLDivElement|null>(null);
   const [orderedCandidates, setOrderedCandidates] = useState(candidates);
   let dragElement: HTMLElement;
   let dragElementIndex: number;
   let rectsBeforeDrag: DOMRect[];
   let dragOffset: Point;
+  let containerOffset: Point;
 
   function onDragStart(e: React.DragEvent) {
     const genericEvent = GenericDragEvent.fromDrag(e);
@@ -129,6 +136,7 @@ export default function CandidateList({ candidates }: CandidateListProps) {
       dragElementIndex = indexAt(
           {x: e.clientX, y: e.clientY});
       dragOffset = computeDragOffset(e);
+      containerOffset = elementCoordinates(listElementRef.current!);
     }
   }
   
@@ -169,7 +177,10 @@ export default function CandidateList({ candidates }: CandidateListProps) {
 
     function positionElementAtIndex(element: HTMLElement, index: number) {
       const indexRect = rectsBeforeDrag[index];
-      const indexPosition = {x: indexRect.x, y: indexRect.y};
+      const indexPosition = {
+        x: indexRect.x - containerOffset.x,
+        y: indexRect.y - containerOffset.y
+      };
       setPosition(element, indexPosition);
     }
 
@@ -189,8 +200,8 @@ export default function CandidateList({ candidates }: CandidateListProps) {
 
   function setDraggedPosition(e: GenericDragEvent) {
     setPosition(dragElement, {
-      x: e.clientX + dragOffset.x,
-      y: e.clientY + dragOffset.y
+      x: e.clientX + dragOffset.x - containerOffset.x,
+      y: e.clientY + dragOffset.y - containerOffset.y
     });
   }
 
@@ -242,7 +253,7 @@ export default function CandidateList({ candidates }: CandidateListProps) {
   }
 
   return (
-    <div id={styles['candidate-list']}>
+    <div id={styles['candidate-list']} ref={listElementRef}>
       {orderedCandidates.map((name, i) =>
         <div id={styles['candidate']} key={i} draggable
             ref={el => candidateElementsRefs.current[i] = el}
