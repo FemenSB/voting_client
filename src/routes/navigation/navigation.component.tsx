@@ -24,12 +24,12 @@ export default function Navigation() {
           <h1>Ranked Voting</h1>
         </Link>
         <Link to='/guide' className={styles['nav-bar-button']}>
-          <Button icon={<BookIcon />} reverse>
+          <Button reverse icon={<BookIcon />}>
             Guide
           </Button>
         </Link>
         <Link to='/about' className={styles['nav-bar-button']}>
-          <Button icon={<BuildingIcon />} reverse>
+          <Button reverse icon={<BuildingIcon />}>
           About
           </Button>
         </Link>

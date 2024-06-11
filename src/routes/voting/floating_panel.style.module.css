@@ -1,0 +1,43 @@
+#button-container {
+  align-items: center;
+  display: flex;
+  margin-inline-end: 16px;
+  margin-inline-start: auto;
+  width: fit-content;
+}
+
+#button-container > * {
+  pointer-events: all;
+}
+
+#side-panel {
+  background-color: var(--tini-main-background-color);
+  border: 1px solid #EBEBF0;
+  border-radius: var(--tini-border-radius-rounded-2);
+  height: 500px;
+  margin-top: 8px;
+  opacity: 0;
+  width: var(--floating-panel-width, 175px);
+}
+
+#side-panel.showing {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#timer-container {
+  align-items: center;
+  display: flex;
+  font-weight: var(--tini-tini-font-weight-bold);
+  margin-inline-end: 24px;
+  user-select: none;
+}
+
+#timer {
+  width: 45px;
+}
+
+.icon {
+  fill: var(--tini-brand-color);
+  margin-inline-end: 4px;
+}

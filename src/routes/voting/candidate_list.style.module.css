@@ -1,5 +1,5 @@
 :root {
-  --candidate-width: 300px;
+  --candidate-width: 30vw;
 }
 
 #candidate-list {

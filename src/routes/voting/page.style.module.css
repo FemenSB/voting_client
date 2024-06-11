@@ -1,4 +1,20 @@
 #candidate-list-container {
-  margin: 50px auto;
-  width: fit-content;
+  display: flex;
+  margin-top: 50px;
+}
+
+#side-panel-container {
+  --floating-panel-width: 30vw;
+  top: 103px;
+  position: absolute;
+  pointer-events: none;
+  right: 8px;
+}
+
+@media (max-aspect-ratio: 5/6) {
+  #side-panel-container {
+    /* In mobile devices, the floating panel should behave as a dialog */
+    --floating-panel-width: 90vw;
+    right: calc((100vw - var(--floating-panel-width)) / 2);
+  }
 }

@@ -9,8 +9,10 @@
   border: none;
   border-radius: var(--tini-border-radius-rounded);
   color: var(--tini-brand-text-color);
+  cursor: pointer;
   display: flex;
   font-size: var(--tini-font-size-medium);
+  height: fit-content;
   padding: 8px 12px;
 }
 
