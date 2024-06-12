@@ -4,9 +4,8 @@ import { ReactComponent as PersonIcon } from '../../icons/person.svg'
 import styles from './floating_panel.style.module.css';
 import { useEffect, useRef, useState } from 'react';
 
-function computeRemainingTime(until: Date): string {
-  const now = new Date();
-  const remainingMiliseconds = until.getTime() - now.getTime();
+function computeRemainingTime(from: Date, until: Date): string {
+  const remainingMiliseconds = until.getTime() - from.getTime();
   const remainingSeconds = remainingMiliseconds / 1000;
   const minutes = Math.floor(remainingSeconds / 60);
   const seconds = Math.floor(remainingSeconds - minutes*60);
@@ -25,12 +24,22 @@ type SidePanelProps = {
 export default function FloatingPanel({ endTime }: SidePanelProps) {
   const [showing, setShowing] = useState(false);
   const [remainingTime, setRemainingTime] =
-      useState(computeRemainingTime(endTime));
+      useState(computeRemainingTime(new Date(), endTime));
   const timerInterval = useRef<any>(null);
 
   useEffect(() => {
+    // We need to clearInterval before setting it because React runs this
+    // function twice, so the second run overrides the reference to the first
+    // interval
+    clearInterval(timerInterval.current);
     timerInterval.current = setInterval(() => {
-      setRemainingTime(computeRemainingTime(endTime));
+      const now = new Date();
+      if (now < endTime) {
+        setRemainingTime(computeRemainingTime(now, endTime));
+      } else {
+        setRemainingTime(computeRemainingTime(endTime, endTime));
+        clearTimeout(timerInterval.current);
+      }
       return () => clearInterval(timerInterval.current);
     }, 1000);
   }, [endTime]);

@@ -1,0 +1,25 @@
+#main {
+  margin-top: 50px;
+}
+
+#table {
+  border-collapse: collapse;
+}
+
+.row + .row {
+  border-top: 1px solid var(--tini-divider-color);
+}
+
+.row > * {
+  font-size: var(--tini-font-size-large);
+  padding: 8px 0;
+  text-align: start;
+}
+
+.index {
+  width: 200px;
+}
+
+.name {
+  font-weight: var(--tini-font-weight-bold);
+}

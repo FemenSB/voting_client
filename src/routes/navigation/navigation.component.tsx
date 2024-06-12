@@ -4,17 +4,18 @@ import { ReactComponent as BookIcon } from '../../icons/book.svg'
 import { ReactComponent as BuildingIcon } from '../../icons/building.svg'
 import styles from './navigation.style.module.css';
 import { ChangeEvent, Fragment, useRef } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
  
 export default function Navigation() {
   const codeToJoin = useRef('');
+  const navigate = useNavigate();
 
   function onCodeInputChange(e: ChangeEvent<HTMLInputElement>) {
     codeToJoin.current = e.target.value;
   }
 
   function joinInputCode() {
-    window.location.pathname = codeToJoin.current;
+    navigate(codeToJoin.current);
   }
 
   return (

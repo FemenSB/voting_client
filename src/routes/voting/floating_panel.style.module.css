@@ -12,7 +12,7 @@
 
 #side-panel {
   background-color: var(--tini-main-background-color);
-  border: 1px solid #EBEBF0;
+  border: 1px solid var(--tini-divider-color);
   border-radius: var(--tini-border-radius-rounded-2);
   height: 500px;
   margin-top: 8px;

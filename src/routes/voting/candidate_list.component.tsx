@@ -101,9 +101,11 @@ function setDragPointer(e: GenericDragEvent) {
 
 type CandidateListProps = {
   candidates: string[];
+  onReordered: (reorderedCandidates: string[]) => void;
 };
 
-export default function CandidateList({ candidates }: CandidateListProps) {
+export default function CandidateList(
+    { candidates, onReordered }: CandidateListProps) {
   const candidateElementsRefs = useRef<Array<HTMLDivElement|null>>([]);
   const listElementRef = useRef<HTMLDivElement|null>(null);
   const [orderedCandidates, setOrderedCandidates] = useState(candidates);
@@ -237,6 +239,7 @@ export default function CandidateList({ candidates }: CandidateListProps) {
     function moveDroppedCandidateTo(index: number) {
       const reordered = moveIndexTo(orderedCandidates, dragElementIndex, index);
       setOrderedCandidates(reordered);
+      onReordered(reordered);
 
       function moveIndexTo<T>(array: T[], from: number, to: number): T[] {
         const result = [...array];
