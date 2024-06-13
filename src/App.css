@@ -29,6 +29,7 @@
 }
 
 :root * {
+  color: var(--tini-main-text-color);
   font-family: 'Inter';
 }
 

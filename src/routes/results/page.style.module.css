@@ -2,6 +2,14 @@
   margin-top: 50px;
 }
 
+#voting-name-container {
+  text-align: center;
+}
+
+#voting-name {
+  color: var(--tini-brand-color);
+}
+
 #table {
   border-collapse: collapse;
 }

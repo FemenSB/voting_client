@@ -5,10 +5,12 @@ export interface IServerProxy {
 }
 
 export type VotingData = {
+  name: string;
   candidates: string[];
   endTime: Date;
 };
 
 export type VotingResults = {
+  name: string;
   orderedCandidates: string[];
 };

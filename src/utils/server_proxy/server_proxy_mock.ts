@@ -5,6 +5,7 @@ export default class ServerProxyMock implements IServerProxy {
   async getStaticData(): Promise<VotingData> {
     await sleep(1500);
     return {
+      name: 'Class president',
       candidates: [
         'Brandt',
         'Adrianna',
@@ -24,6 +25,7 @@ export default class ServerProxyMock implements IServerProxy {
   async getResults(): Promise<VotingResults> {
     await sleep(1500);
     return {
+      name: 'Class president',
       orderedCandidates: [
         'Avis',
         'Brandt',

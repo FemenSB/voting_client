@@ -23,7 +23,7 @@ export default function Navigation() {
       <nav id={styles['nav-bar']}>
         <div id={styles['nav-links']}>
           <Link to='/' className={styles['nav-bar-button']}>
-            <h1>Ranked Voting</h1>
+            <h1 id={styles['home-link']}>Ranked Voting</h1>
           </Link>
           <Link to='/guide' className={styles['nav-bar-button']}>
             <Button reverse icon={<BookIcon />}>

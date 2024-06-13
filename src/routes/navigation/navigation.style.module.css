@@ -10,7 +10,7 @@
   display: flex;
 }
 
-#nav-links > * {
+#home-link{
   color: var(--tini-brand-text-color);
 }
 

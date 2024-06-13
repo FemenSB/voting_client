@@ -1,4 +1,5 @@
 import Loading from '../../elements/loading/loading.component';
+import { VotingData } from '../../utils/server_proxy/server_proxy';
 import IServerProxyFactory from '../../utils/server_proxy/server_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import CandidateList from './candidate_list.component';
@@ -13,8 +14,7 @@ type VotingPageProps = {
 
 export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
   const { id } = useParams();
-  const [candidates, setCandidates] = useState<string[]>([]);
-  const [endTime, setEndTime] = useState<Date>(new Date());
+  const [votingData, setVotingData] = useState<VotingData|null>(null);
   const serverProxy = useRef(serverProxyFactory.forVoting(id!));
   const orderedCandidates = useRef<string[]>([]);
   const votingEndTimeout = useRef<any>();
@@ -23,22 +23,19 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
   console.log(id);
 
   const initialize = useCallback(async () => {
-    console.log('initializing voting');
     const data = await serverProxy.current.getStaticData();
-    setCandidates(data.candidates);
-    orderedCandidates.current = data.candidates;
-    setEndTime(data.endTime);
+    setVotingData(data);
   }, []);
 
   const initialized = useInitialize(initialize);
 
   useEffect(() => {
-    if (!initialized) return;
+    if (!votingData) return;
     setVotingEndTimeout();
 
     function setVotingEndTimeout() {
       clearTimeout(votingEndTimeout.current);
-      const timeUntilEnding = endTime.getTime() - Date.now();
+      const timeUntilEnding = votingData!.endTime.getTime() - Date.now();
       votingEndTimeout.current = setTimeout(endVoting, timeUntilEnding);
     }
 
@@ -46,7 +43,7 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
       await serverProxy.current.sendVote(orderedCandidates.current);
       navigate(`/results/${id}`);
     }
-  }, [initialized, endTime, id, navigate]);
+  }, [votingData, id, navigate]);
 
   function onReordered(candidates: string[]) {
     orderedCandidates.current = candidates;
@@ -57,10 +54,12 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
       {initialized ?
         <Fragment>
           <div className='margin-centralize'>
-            <CandidateList candidates={candidates} onReordered={onReordered} />
+            <h1 id={styles['voting-name']}>{votingData!.name}</h1>
+            <CandidateList candidates={votingData!.candidates}
+                onReordered={onReordered} />
           </div>
           <div id={styles['side-panel-container']}>
-            <FloatingPanel endTime={endTime} />
+            <FloatingPanel endTime={votingData!.endTime} />
           </div>
         </Fragment>
         :
