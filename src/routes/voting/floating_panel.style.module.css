@@ -14,7 +14,10 @@
   background-color: var(--tini-main-background-color);
   border: 1px solid var(--tini-divider-color);
   border-radius: var(--tini-border-radius-rounded-2);
+  display: flex;
+  flex-wrap: wrap;
   height: 500px;
+  align-content: flex-start;
   margin-top: 8px;
   opacity: 0;
   width: var(--floating-panel-width, 175px);
@@ -23,6 +26,32 @@
 #side-panel.showing {
   opacity: 1;
   pointer-events: all;
+}
+
+.voter {
+  --voter-color: var(--tini-orange-60);
+  align-items: center;
+  border: 2px solid var(--voter-color);
+  border-radius: var(--tini-border-radius-rounded-2);
+  color: var(--voter-color);
+  display: flex;
+  font-weight: var(--tini-font-weight-bold);
+  height: fit-content;
+  margin: 8px;
+  padding: 8px 12px;
+  transition-duration: 500ms;
+  transition-property: border, color;
+  transition-timing-function: ease-in-out;
+  user-select: none;
+}
+
+.voter > * {
+  fill: var(--voter-color);
+  margin-inline-start: 8px;
+}
+
+.voter.done {
+  --voter-color: var(--tini-green-60);
 }
 
 #timer-container {

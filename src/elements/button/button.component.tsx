@@ -9,14 +9,18 @@ type ButtonProps = {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   reverse?: boolean;
   pill?: boolean;
+  bordered?: boolean;
+  trailingIcon?: boolean;
 };
 
-export default function Button(
-    { icon, children, onClick, reverse, pill }: ButtonProps) {
+export default function Button({ icon, children, onClick, reverse, pill,
+      bordered, trailingIcon }: ButtonProps) {
   const buttonIcon = icon ? addClassName(icon, styles['button-icon']) : null;
   const buttonClasses = classNames({
       [styles.reverse]: reverse,
       [styles.pill]: pill,
+      [styles.bordered]: bordered,
+      [styles['trailing-icon']]: trailingIcon,
   })
   return (
     <button id={styles['button-element']} className={buttonClasses}

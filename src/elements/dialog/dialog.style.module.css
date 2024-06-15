@@ -1,0 +1,56 @@
+#background {
+  background-color: var(--tini-overlay-background-color);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+}
+
+#dialog {
+  background-color: var(--tini-brand-text-color);
+  border: none;
+  border-radius: var(--tini-border-radius-rounded-2);
+  left: 50%;
+  margin: 0;
+  padding: 16px;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-aspect-ratio: 1) {
+  #dialog {
+    width: calc(100vw - 64px);
+  }
+}
+
+#dialog > * {
+  text-align: center;
+}
+
+#title {
+  margin: 0 0 8px 0;
+}
+
+#description {
+  margin: 0;
+}
+
+#children-container {
+  margin: 16px 0;
+}
+
+#button-container {
+  --button-width: 100%;
+  display: flex;
+}
+
+#button-container.vertical {
+  flex-direction: column;
+}
+
+.button-separator {
+  height: 8px;
+  width: 8px;
+}

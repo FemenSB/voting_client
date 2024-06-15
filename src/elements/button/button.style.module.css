@@ -6,14 +6,17 @@
 #button-element {
   align-items: center;
   background-color: var(--tini-brand-color);
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0);
   border-radius: var(--tini-border-radius-rounded);
+  box-sizing: border-box;
   color: var(--tini-brand-text-color);
   cursor: pointer;
   display: flex;
   font-size: var(--tini-font-size-medium);
   height: fit-content;
+  justify-content: center;
   padding: 8px 12px;
+  width: var(--button-width);
 }
 
 #button-element:hover {
@@ -35,4 +38,22 @@
 
 #button-element.reverse > .button-icon {
     fill: var(--tini-brand-color);
+}
+
+#button-element.bordered {
+  border: 1px solid var(--tini-brand-text-color);
+}
+
+#button-element.reverse.bordered {
+  border: 1px solid var(--tini-brand-color);
+}
+
+#button-element.trailing-icon {
+  flex-direction: row-reverse;
+}
+
+#button-element.trailing-icon > .button-icon {
+  flex-direction: row-reverse;
+  margin-inline-end: unset;
+  margin-inline-start: 8px;
 }

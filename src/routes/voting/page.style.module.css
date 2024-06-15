@@ -1,3 +1,8 @@
+
+#voting-name {
+  text-align: center;
+}
+
 #candidate-list-container {
   display: flex;
   position: relative;
@@ -12,8 +17,10 @@
   right: 8px;
 }
 
-#voting-name {
-  text-align: center;
+#done-button-container {
+  left: 8px;
+  position: absolute;
+  top: -42px;
 }
 
 @media (max-aspect-ratio: 5/6) {

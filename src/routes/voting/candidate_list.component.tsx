@@ -102,10 +102,11 @@ function setDragPointer(e: GenericDragEvent) {
 type CandidateListProps = {
   candidates: string[];
   onReordered: (reorderedCandidates: string[]) => void;
+  locked: boolean;
 };
 
 export default function CandidateList(
-    { candidates, onReordered }: CandidateListProps) {
+    { candidates, onReordered, locked }: CandidateListProps) {
   const candidateElementsRefs = useRef<Array<HTMLDivElement|null>>([]);
   const listElementRef = useRef<HTMLDivElement|null>(null);
   const [orderedCandidates, setOrderedCandidates] = useState(candidates);
@@ -256,9 +257,10 @@ export default function CandidateList(
   }
 
   return (
-    <div id={styles['candidate-list']} ref={listElementRef}>
+    <div id={styles['candidate-list']} className={locked ? styles.locked : ''}
+        ref={listElementRef}>
       {orderedCandidates.map((name, i) =>
-        <div id={styles['candidate']} key={i} draggable
+        <div id={styles['candidate']} key={i} draggable={!locked}
             ref={el => candidateElementsRefs.current[i] = el}
             onDragStart={onDragStart} onDragEnd={onDragEnd}
             onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>

@@ -1,5 +1,6 @@
 :root {
   --candidate-width: 30vw;
+  --candidate-item-color: #27272A;
 }
 
 #candidate-list {
@@ -8,7 +9,7 @@
 }
 
 #candidate {
-  background-color: #27272A;
+  background-color: var(--candidate-item-color);
   border-radius: 4px;
   box-sizing: border-box;
   color: var(--tini-brand-text-color);
@@ -17,6 +18,10 @@
   text-align: center;
   user-select: none;
   width: var(--candidate-width);
+}
+
+#candidate-list.locked > #candidate {
+  opacity: .6;
 }
 
 #candidate:not(:active) {

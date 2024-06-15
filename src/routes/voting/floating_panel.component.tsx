@@ -1,6 +1,9 @@
 import Button from '../../elements/button/button.component';
+import { ReactComponent as CheckIcon } from '../../icons/check.svg';
 import { ReactComponent as ClockIcon } from '../../icons/clock.svg'
+import { ReactComponent as PencilIcon } from '../../icons/pencil_line.svg';
 import { ReactComponent as PersonIcon } from '../../icons/person.svg'
+import { VoterStatus } from '../../utils/server_proxy/server_proxy';
 import styles from './floating_panel.style.module.css';
 import { useEffect, useRef, useState } from 'react';
 
@@ -19,9 +22,10 @@ function computeRemainingTime(from: Date, until: Date): string {
 
 type SidePanelProps = {
   endTime: Date;
+  voters: VoterStatus[];
 };
 
-export default function FloatingPanel({ endTime }: SidePanelProps) {
+export default function FloatingPanel({ endTime, voters }: SidePanelProps) {
   const [showing, setShowing] = useState(false);
   const [remainingTime, setRemainingTime] =
       useState(computeRemainingTime(new Date(), endTime));
@@ -57,11 +61,22 @@ export default function FloatingPanel({ endTime }: SidePanelProps) {
             {remainingTime}
           </p>
         </div>
-        <Button pill icon={<PersonIcon />} onClick={onToggleClick}>
+        <Button pill reverse bordered icon={<PersonIcon />}
+            onClick={onToggleClick}>
           voters
         </Button>
       </div>
       <div id={styles['side-panel']} className={showing ? styles.showing : ''}>
+        {voters.map((voter, i) => (
+          <div key={i}
+              className={`${styles.voter} ${voter.done ? styles.done : ''}`}
+              title={voter.done ?
+                  `${voter.nickname} is done voting`
+                  : `${voter.nickname} is still voting`}>
+            {voter.nickname}
+            {voter.done ? <CheckIcon /> : <PencilIcon />}
+          </div>
+        ))}
       </div>
     </div>
   );

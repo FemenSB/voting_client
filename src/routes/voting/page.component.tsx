@@ -1,5 +1,10 @@
+import Button from '../../elements/button/button.component';
+import Dialog from '../../elements/dialog/dialog.component';
 import Loading from '../../elements/loading/loading.component';
-import { VotingData } from '../../utils/server_proxy/server_proxy';
+import TextField from '../../elements/text_field/text_field.component';
+import { ReactComponent as CheckIcon } from '../../icons/check.svg';
+import { ReactComponent as PencilIcon } from '../../icons/pencil.svg';
+import { VoterStatus, VotingData } from '../../utils/server_proxy/server_proxy';
 import IServerProxyFactory from '../../utils/server_proxy/server_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import CandidateList from './candidate_list.component';
@@ -15,12 +20,15 @@ type VotingPageProps = {
 export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
   const { id } = useParams();
   const [votingData, setVotingData] = useState<VotingData|null>(null);
+  const [showNicknameDialog, setShowNicknameDialog] = useState(true);
+  const [showConfirmDoneDialog, setShowConfirmDoneDialog] = useState(false);
+  const [voters, setVoters] = useState<VoterStatus[]>([]);
+  const [doneVoting, setDoneVoting] = useState(false);
+  const nickname = useRef('');
   const serverProxy = useRef(serverProxyFactory.forVoting(id!));
   const orderedCandidates = useRef<string[]>([]);
   const votingEndTimeout = useRef<any>();
   const navigate = useNavigate();
-
-  console.log(id);
 
   const initialize = useCallback(async () => {
     const data = await serverProxy.current.getStaticData();
@@ -45,8 +53,46 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
     }
   }, [votingData, id, navigate]);
 
+  function onNicknameConfirm() {
+    if (!nickname.current) return;
+    serverProxy.current.connectSocket(nickname.current,
+        onVotersChanged, onVotingEndedEarly);
+    setShowNicknameDialog(false);
+  }
+
+  function onVotersChanged(voters: VoterStatus[]) {
+    setVoters(voters);
+  }
+
+  function onVotingEndedEarly() {
+    navigate(`/results/${id}`);
+  }
+
   function onReordered(candidates: string[]) {
     orderedCandidates.current = candidates;
+  }
+
+  function onDoneClick() {
+    if (doneVoting) {
+      setDone(false);
+    } else {
+      setShowConfirmDoneDialog(true);
+    }
+  }
+
+  function onDoneConfirmed() {
+    serverProxy.current.sendVote(orderedCandidates.current);
+    setDone(true);
+    setShowConfirmDoneDialog(false);
+  }
+
+  function setDone(done: boolean) {
+    setDoneVoting(done);
+    serverProxy.current.setDone(done);
+  }
+
+  function onDoneCanceled() {
+    setShowConfirmDoneDialog(false);
   }
 
   return (
@@ -55,12 +101,32 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
         <Fragment>
           <div className='margin-centralize'>
             <h1 id={styles['voting-name']}>{votingData!.name}</h1>
-            <CandidateList candidates={votingData!.candidates}
+            <CandidateList locked={doneVoting} candidates={votingData!.candidates}
                 onReordered={onReordered} />
           </div>
           <div id={styles['side-panel-container']}>
-            <FloatingPanel endTime={votingData!.endTime} />
+            <FloatingPanel endTime={votingData!.endTime} voters={voters} />
           </div>
+          <div id={styles['done-button-container']}>
+            <Button pill trailingIcon onClick={onDoneClick}
+                icon={doneVoting ? <PencilIcon /> : <CheckIcon />}>
+              {doneVoting ? 'Edit votes' : 'Send votes'}
+            </Button>
+          </div>
+          <Dialog open={showNicknameDialog}
+              title={`Joining '${votingData!.name}'`}
+              description='Set your nickname to continue'
+              primaryButton={
+                  {label: 'Continue', onClick: onNicknameConfirm}}>
+            <TextField autoFocus placeholder='Nickname' boundRef={nickname}
+                onAction={onNicknameConfirm} />
+          </Dialog>
+          <Dialog open={showConfirmDoneDialog}
+              title='Are you done voting?'
+              description={'Your votes will be registered.'
+                  + ' Voting will end early if all voters are done'}
+              primaryButton={{label: 'Continue', onClick: onDoneConfirmed}}
+              secondaryButton={{label: 'Cancel', onClick: onDoneCanceled}} />
         </Fragment>
         :
         <div className='margin-centralize'>

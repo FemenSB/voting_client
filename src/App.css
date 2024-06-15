@@ -18,9 +18,12 @@
   --tini-brand-color: #0A68FF;
   --tini-brand-text-color: #FFFFFF;
   --tini-divider-color: #EBEBF0;
+  --tini-green-60: #00AB56;
   --tini-main-background-color: #FFFFFF;
   --tini-main-text-color: #27272A;
   --tini-placeholder-text-color: #808089;
+  --tini-orange-60: #FC820A;
+  --tini-overlay-background-color: rgba(0, 0, 0, .4);
 }
 
 @font-face {

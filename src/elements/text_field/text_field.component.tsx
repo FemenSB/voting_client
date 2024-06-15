@@ -1,15 +1,17 @@
 import styles from './text_field.style.module.css'
-import { ChangeEvent, Fragment, useRef, useState, KeyboardEvent } from 'react';
+import { ChangeEvent, Fragment, MutableRefObject, useRef, useState, KeyboardEvent } from 'react';
 
 type TextFieldProps = {
   placeholder?: string;
   buttonLabel?: string;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onAction?: () => void;
+  boundRef?: MutableRefObject<string>;
+  autoFocus?: boolean;
 };
 
-export default function TextField(
-    { placeholder, buttonLabel, onAction, onChange }: TextFieldProps) {
+export default function TextField({ placeholder, buttonLabel, onAction,
+      onChange, boundRef, autoFocus}: TextFieldProps) {
   const [focused, setFocused] = useState(false);
   const inputElement = useRef<HTMLInputElement>(null);
 
@@ -23,6 +25,13 @@ export default function TextField(
 
   function onInputContainerClick() {
     inputElement.current!.focus();
+  }
+
+  function onInputChange(e: ChangeEvent<HTMLInputElement>) {
+    if (boundRef) {
+      boundRef.current = e.target.value;
+    }
+    onChange?.(e);
   }
 
   function onKeyDown(e: KeyboardEvent) {
@@ -39,7 +48,8 @@ export default function TextField(
           onClick={onInputContainerClick}>
         <input id={styles['text-field-input']} placeholder={placeholder}
             onFocus={onInputFocus} onBlur={onInputBlur} autoComplete='off'
-            onChange={onChange} onKeyDown={onKeyDown} ref={inputElement} />
+            onChange={onInputChange} onKeyDown={onKeyDown} ref={inputElement}
+            autoFocus={autoFocus}/>
       </div>
       {buttonLabel && (
         <Fragment>
