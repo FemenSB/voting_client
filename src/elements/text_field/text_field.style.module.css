@@ -1,7 +1,33 @@
 :root {
   --tini-input-border-active-color: #808089;
-  --tini-input-border-default-color: #DDDDE3;
+  --tini-input-border-default-color: var(--tini-border-default-color);
   --tini-input-border-hover-color: #A6A6B0;
+}
+
+.icon {
+  fill: var(--text-field-border-color);
+  height: 26px;
+  padding-inline-end: 10px;
+  width: 26px;
+}
+
+.text-field-section {
+  padding-bottom: 8px;
+  padding-inline: 16px 8px;
+  padding-top: 8px;
+}
+
+.text-field-section-separator {
+  background-color: var(--tini-input-border-default-color);
+  height: 24px;
+  width: 1px;
+}
+
+#label {
+  font-size: var(--tini-font-size-base);
+  font-weight: var(--tini-font-weight-bold);
+  margin: 0 0 6px 0;
+  user-select: none;
 }
 
 #text-field-container {
@@ -21,8 +47,17 @@
   --text-field-border-color: var(--tini-input-border-active-color);
 }
 
+#text-field-container.error {
+  --text-field-border-color: var(--tini-error-color);
+}
+
 #text-field-input-container {
   cursor: text;
+  width: 100%;
+}
+
+#text-field-input {
+  width: 100%;
 }
 
 #text-field-input::placeholder {
@@ -45,14 +80,10 @@
   user-select: none;
 }
 
-.text-field-section {
-  padding-bottom: 8px;
-  padding-inline: 16px 8px;
-  padding-top: 8px;
-}
-
-.text-field-section-separator {
-  background-color: var(--tini-input-border-default-color);
-  height: 24px;
-  width: 1px;
+#error-message {
+  color: var(--tini-error-color);
+  font-size: var(--tini-font-size-small);
+  font-weight: var(--tini-font-weight-regular);
+  margin: 6px 0 0 0;
+  user-select: none;
 }

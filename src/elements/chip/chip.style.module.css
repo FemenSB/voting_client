@@ -1,0 +1,37 @@
+#chip {
+  align-items: center;
+  border: 1px solid var(--tini-border-default-color);
+  border-radius: var(--tini-border-radius-pill);
+  display: flex;
+  font-size: var(--tini-font-size-base);
+  padding: 6px 4px 6px 12px;
+  user-select: none;
+  width: fit-content;
+}
+
+#value {
+  margin-inline-end: 8px;
+}
+
+#remove {
+  align-items: center;
+  background-color: rgba(0, 0, 0, .1);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+}
+
+#remove > * {
+  fill: var(--tini-icon-default-color);
+}
+
+#remove:hover {
+  opacity: .8;
+}
+
+#remove:active {
+  opacity: .6;
+}

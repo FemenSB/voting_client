@@ -11,16 +11,18 @@ type ButtonProps = {
   pill?: boolean;
   bordered?: boolean;
   trailingIcon?: boolean;
+  disabled?: boolean
 };
 
 export default function Button({ icon, children, onClick, reverse, pill,
-      bordered, trailingIcon }: ButtonProps) {
+      bordered, trailingIcon, disabled }: ButtonProps) {
   const buttonIcon = icon ? addClassName(icon, styles['button-icon']) : null;
   const buttonClasses = classNames({
       [styles.reverse]: reverse,
       [styles.pill]: pill,
       [styles.bordered]: bordered,
       [styles['trailing-icon']]: trailingIcon,
+      [styles.disabled]: disabled,
   })
   return (
     <button id={styles['button-element']} className={buttonClasses}

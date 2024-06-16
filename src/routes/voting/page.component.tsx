@@ -101,8 +101,8 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
         <Fragment>
           <div className='margin-centralize'>
             <h1 id={styles['voting-name']}>{votingData!.name}</h1>
-            <CandidateList locked={doneVoting} candidates={votingData!.candidates}
-                onReordered={onReordered} />
+            <CandidateList locked={doneVoting} onReordered={onReordered}
+                candidates={votingData!.candidates} />
           </div>
           <div id={styles['side-panel-container']}>
             <FloatingPanel endTime={votingData!.endTime} voters={voters} />

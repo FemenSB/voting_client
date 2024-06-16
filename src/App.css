@@ -13,12 +13,16 @@
   --tini-font-size-base: 14px;
   --tini-font-size-large: 18px;
   --tini-font-size-medium: 16px;
+  --tini-font-size-small: 12px;
 
   /* colors */
+  --tini-border-default-color: #DDDDE3;
   --tini-brand-color: #0A68FF;
   --tini-brand-text-color: #FFFFFF;
   --tini-divider-color: #EBEBF0;
+  --tini-error-color: #FF424F;
   --tini-green-60: #00AB56;
+  --tini-icon-default-color: #515158;
   --tini-main-background-color: #FFFFFF;
   --tini-main-text-color: #27272A;
   --tini-placeholder-text-color: #808089;

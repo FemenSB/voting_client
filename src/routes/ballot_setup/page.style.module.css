@@ -1,0 +1,35 @@
+#forms {
+  width: 30vw;
+}
+
+#forms > * {
+  margin-top: 16px;
+}
+
+#candidates {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  width: 60vw;
+}
+
+#candidates > * {
+  margin: 8px;
+}
+
+#start {
+  --button-width: 200px;
+}
+
+@media (max-aspect-ratio: 1) {
+  #forms {
+    width: 60vw;
+  }
+
+  #candidates {
+    width: 90vw;
+  }
+}
