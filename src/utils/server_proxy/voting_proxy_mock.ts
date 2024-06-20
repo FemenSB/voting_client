@@ -1,9 +1,9 @@
 import { doNothing, sleep } from '../do_nothing';
-import {IServerProxy, VoterStatus, VotingData, VotingResults} from './server_proxy';
+import {IVotingProxy, VoterStatus, VotingData, VotingResults} from './voting_proxy';
 
 const VOTER_NOT_DONE = 'Johnathan';
 
-export default class ServerProxyMock implements IServerProxy {
+export default class VotingProxyMock implements IVotingProxy {
   private userVoter_: VoterStatus = {nickname: '', done: false};
   private votingEndedCallback_: () => void = doNothing;
   private votersChangedCallback_: (voters: VoterStatus[]) => void = doNothing;

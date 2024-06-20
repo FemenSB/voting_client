@@ -7,9 +7,9 @@ import Navigation from './routes/navigation/navigation.component';
 import ResultsPage from './routes/results/page.component';
 import VotingPage from './routes/voting/page.component';
 import { Route, Routes } from 'react-router-dom';
-import ServerProxyFactoryMock from './utils/server_proxy/server_proxy_factory_mock';
+import VotingProxyFactoryMock from './utils/server_proxy/voting_proxy_factory_mock';
 
-const serverProxyFactory = new ServerProxyFactoryMock();
+const votingProxyFactory = new VotingProxyFactoryMock();
 
 function App() {
   return (
@@ -19,9 +19,9 @@ function App() {
         <Route path='guide' element={<GuidePage />} />
         <Route path='about' element={<AboutPage />} />
         <Route path=':id' element={
-            <VotingPage serverProxyFactory={serverProxyFactory} />} />
+            <VotingPage votingProxyFactory={votingProxyFactory} />} />
         <Route path='results/:id' element={
-            <ResultsPage serverProxyFactory={serverProxyFactory} />} />
+            <ResultsPage votingProxyFactory={votingProxyFactory} />} />
       </Route>
     </Routes>
   );

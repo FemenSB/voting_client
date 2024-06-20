@@ -1,22 +1,22 @@
 import Loading from '../../elements/loading/loading.component';
-import { VotingResults } from '../../utils/server_proxy/server_proxy';
-import IServerProxyFactory from '../../utils/server_proxy/server_proxy_factory';
+import { VotingResults } from '../../utils/server_proxy/voting_proxy';
+import IVotingProxyFactory from '../../utils/server_proxy/voting_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import styles from './page.style.module.css';
 import { useCallback, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 type ResultsPageProps = {
-  serverProxyFactory: IServerProxyFactory;
+  votingProxyFactory: IVotingProxyFactory;
 };
 
-export default function ResultsPage({ serverProxyFactory }: ResultsPageProps) {
+export default function ResultsPage({ votingProxyFactory }: ResultsPageProps) {
   const { id } = useParams();
-  const serverProxy = useRef(serverProxyFactory.forVoting(id!));
+  const votingProxy = useRef(votingProxyFactory.forVoting(id!));
   const [votingResults, setVotingResults] = useState<VotingResults|null>(null);
 
   const initialize = useCallback(async () => {
-    const data = await serverProxy.current.getResults();
+    const data = await votingProxy.current.getResults();
     setVotingResults(data);
   }, []);
   const initialized = useInitialize(initialize);

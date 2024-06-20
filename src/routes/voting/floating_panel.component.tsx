@@ -3,7 +3,7 @@ import { ReactComponent as CheckIcon } from '../../icons/check.svg';
 import { ReactComponent as ClockIcon } from '../../icons/clock.svg'
 import { ReactComponent as PencilIcon } from '../../icons/pencil_line.svg';
 import { ReactComponent as PersonIcon } from '../../icons/person.svg'
-import { VoterStatus } from '../../utils/server_proxy/server_proxy';
+import { VoterStatus } from '../../utils/server_proxy/voting_proxy';
 import styles from './floating_panel.style.module.css';
 import { useEffect, useRef, useState } from 'react';
 

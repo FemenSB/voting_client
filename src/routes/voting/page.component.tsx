@@ -4,8 +4,8 @@ import Loading from '../../elements/loading/loading.component';
 import TextField from '../../elements/text_field/text_field.component';
 import { ReactComponent as CheckIcon } from '../../icons/check.svg';
 import { ReactComponent as PencilIcon } from '../../icons/pencil.svg';
-import { VoterStatus, VotingData } from '../../utils/server_proxy/server_proxy';
-import IServerProxyFactory from '../../utils/server_proxy/server_proxy_factory';
+import { VoterStatus, VotingData } from '../../utils/server_proxy/voting_proxy';
+import IVotingProxyFactory from '../../utils/server_proxy/voting_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import CandidateList from './candidate_list.component';
 import FloatingPanel from './floating_panel.component';
@@ -14,10 +14,10 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 type VotingPageProps = {
-  serverProxyFactory: IServerProxyFactory;
+  votingProxyFactory: IVotingProxyFactory;
 };
 
-export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
+export default function VotingPage({ votingProxyFactory }: VotingPageProps) {
   const { id } = useParams();
   const [votingData, setVotingData] = useState<VotingData|null>(null);
   const [showNicknameDialog, setShowNicknameDialog] = useState(true);
@@ -25,13 +25,13 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
   const [voters, setVoters] = useState<VoterStatus[]>([]);
   const [doneVoting, setDoneVoting] = useState(false);
   const nickname = useRef('');
-  const serverProxy = useRef(serverProxyFactory.forVoting(id!));
+  const votingProxy = useRef(votingProxyFactory.forVoting(id!));
   const orderedCandidates = useRef<string[]>([]);
   const votingEndTimeout = useRef<any>();
   const navigate = useNavigate();
 
   const initialize = useCallback(async () => {
-    const data = await serverProxy.current.getStaticData();
+    const data = await votingProxy.current.getStaticData();
     setVotingData(data);
   }, []);
 
@@ -48,14 +48,14 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
     }
 
     async function endVoting() {
-      await serverProxy.current.sendVote(orderedCandidates.current);
+      await votingProxy.current.sendVote(orderedCandidates.current);
       navigate(`/results/${id}`);
     }
   }, [votingData, id, navigate]);
 
   function onNicknameConfirm() {
     if (!nickname.current) return;
-    serverProxy.current.connectSocket(nickname.current,
+    votingProxy.current.connectSocket(nickname.current,
         onVotersChanged, onVotingEndedEarly);
     setShowNicknameDialog(false);
   }
@@ -81,14 +81,14 @@ export default function VotingPage({ serverProxyFactory }: VotingPageProps) {
   }
 
   function onDoneConfirmed() {
-    serverProxy.current.sendVote(orderedCandidates.current);
+    votingProxy.current.sendVote(orderedCandidates.current);
     setDone(true);
     setShowConfirmDoneDialog(false);
   }
 
   function setDone(done: boolean) {
     setDoneVoting(done);
-    serverProxy.current.setDone(done);
+    votingProxy.current.setDone(done);
   }
 
   function onDoneCanceled() {

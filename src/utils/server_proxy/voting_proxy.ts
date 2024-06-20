@@ -1,4 +1,4 @@
-export interface IServerProxy {
+export interface IVotingProxy {
   getStaticData(): Promise<VotingData>;
   sendVote(orderedCandidates: string[]): Promise<void>;
   getResults(): Promise<VotingResults>;
