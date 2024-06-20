@@ -4,7 +4,7 @@ import Loading from '../../elements/loading/loading.component';
 import TextField from '../../elements/text_field/text_field.component';
 import { ReactComponent as CheckIcon } from '../../icons/check.svg';
 import { ReactComponent as PencilIcon } from '../../icons/pencil.svg';
-import { VoterStatus, VotingData } from '../../utils/server_proxy/voting_proxy';
+import { IVotingProxy, VoterStatus, VotingData } from '../../utils/server_proxy/voting_proxy';
 import IVotingProxyFactory from '../../utils/server_proxy/voting_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import CandidateList from './candidate_list.component';
@@ -25,12 +25,13 @@ export default function VotingPage({ votingProxyFactory }: VotingPageProps) {
   const [voters, setVoters] = useState<VoterStatus[]>([]);
   const [doneVoting, setDoneVoting] = useState(false);
   const nickname = useRef('');
-  const votingProxy = useRef(votingProxyFactory.forVoting(id!));
+  const votingProxy = useRef<IVotingProxy|null>(null);
   const orderedCandidates = useRef<string[]>([]);
   const votingEndTimeout = useRef<any>();
   const navigate = useNavigate();
 
   const initialize = useCallback(async () => {
+    votingProxy.current = votingProxyFactory.forVoting(id!);
     const data = await votingProxy.current.getStaticData();
     setVotingData(data);
   }, []);
@@ -48,14 +49,14 @@ export default function VotingPage({ votingProxyFactory }: VotingPageProps) {
     }
 
     async function endVoting() {
-      await votingProxy.current.sendVote(orderedCandidates.current);
+      await votingProxy.current!.sendVote(orderedCandidates.current);
       navigate(`/results/${id}`);
     }
   }, [votingData, id, navigate]);
 
   function onNicknameConfirm() {
     if (!nickname.current) return;
-    votingProxy.current.connectSocket(nickname.current,
+    votingProxy.current!.connectSocket(nickname.current,
         onVotersChanged, onVotingEndedEarly);
     setShowNicknameDialog(false);
   }
@@ -81,14 +82,14 @@ export default function VotingPage({ votingProxyFactory }: VotingPageProps) {
   }
 
   function onDoneConfirmed() {
-    votingProxy.current.sendVote(orderedCandidates.current);
+    votingProxy.current!.sendVote(orderedCandidates.current);
     setDone(true);
     setShowConfirmDoneDialog(false);
   }
 
   function setDone(done: boolean) {
     setDoneVoting(done);
-    votingProxy.current.setDone(done);
+    votingProxy.current!.setDone(done);
   }
 
   function onDoneCanceled() {

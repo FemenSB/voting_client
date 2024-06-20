@@ -1,5 +1,5 @@
 import Loading from '../../elements/loading/loading.component';
-import { VotingResults } from '../../utils/server_proxy/voting_proxy';
+import { IVotingProxy, VotingResults } from '../../utils/server_proxy/voting_proxy';
 import IVotingProxyFactory from '../../utils/server_proxy/voting_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import styles from './page.style.module.css';
@@ -12,10 +12,11 @@ type ResultsPageProps = {
 
 export default function ResultsPage({ votingProxyFactory }: ResultsPageProps) {
   const { id } = useParams();
-  const votingProxy = useRef(votingProxyFactory.forVoting(id!));
+  const votingProxy = useRef<IVotingProxy|null>(null);
   const [votingResults, setVotingResults] = useState<VotingResults|null>(null);
 
   const initialize = useCallback(async () => {
+    votingProxy.current = votingProxyFactory.forVoting(id!);
     const data = await votingProxy.current.getResults();
     setVotingResults(data);
   }, []);
