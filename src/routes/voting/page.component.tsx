@@ -34,7 +34,7 @@ export default function VotingPage({ votingProxyFactory }: VotingPageProps) {
     votingProxy.current = votingProxyFactory.forVoting(id!);
     const data = await votingProxy.current.getStaticData();
     setVotingData(data);
-  }, []);
+  }, [votingProxyFactory, id]);
 
   const initialized = useInitialize(initialize);
 
