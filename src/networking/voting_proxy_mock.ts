@@ -1,4 +1,4 @@
-import { doNothing, sleep } from '../do_nothing';
+import { doNothing, sleep } from '../utils/do_nothing';
 import {IVotingProxy, VoterStatus, VotingData, VotingResults} from './voting_proxy';
 
 const VOTER_NOT_DONE = 'Johnathan';

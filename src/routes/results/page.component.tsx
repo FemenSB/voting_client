@@ -1,6 +1,6 @@
 import Loading from '../../elements/loading/loading.component';
-import { IVotingProxy, VotingResults } from '../../utils/server_proxy/voting_proxy';
-import IVotingProxyFactory from '../../utils/server_proxy/voting_proxy_factory';
+import { IVotingProxy, VotingResults } from '../../networking/voting_proxy';
+import IVotingProxyFactory from '../../networking/voting_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import styles from './page.style.module.css';
 import { useCallback, useRef, useState } from 'react';

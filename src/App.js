@@ -7,7 +7,7 @@ import Navigation from './routes/navigation/navigation.component';
 import ResultsPage from './routes/results/page.component';
 import VotingPage from './routes/voting/page.component';
 import { Route, Routes } from 'react-router-dom';
-import VotingProxyFactoryMock from './utils/server_proxy/voting_proxy_factory_mock';
+import VotingProxyFactoryMock from './networking/voting_proxy_factory_mock';
 
 const votingProxyFactory = new VotingProxyFactoryMock();
 

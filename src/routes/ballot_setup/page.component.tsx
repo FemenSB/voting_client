@@ -1,9 +1,11 @@
 import Button from '../../elements/button/button.component';
 import Chip from '../../elements/chip/chip.component';
 import TextField, { TextFieldHandle } from '../../elements/text_field/text_field.component';
+import createVoting from '../../networking/create_voting';
 import styles from './page.style.module.css';
 
 import { Fragment, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 enum candidateInputState {
   VALID,
@@ -23,6 +25,7 @@ export default function BallotSetupPage() {
   const candidateName = useRef('');
   const [candidateErrorMessage, setCandidateErrorMessage] = useState('');
   const candidateInputRef = useRef<TextFieldHandle>(null);
+  const navigate = useNavigate();
 
   function addCandidate() {
     const candidateState = getCandidateInputState();
@@ -46,8 +49,12 @@ export default function BallotSetupPage() {
     setCandidates(candidates.filter(candidate => candidate !== removed));
   }
 
-  function onStartClick() {
-
+  async function onStartClick() {
+    const votingCode = await createVoting({
+      name: votingName,
+      candidates: candidates,
+    });
+    navigate(votingCode);
   }
 
   const disableStart = !votingName || candidates.length < 2;

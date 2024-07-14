@@ -4,8 +4,8 @@ import Loading from '../../elements/loading/loading.component';
 import TextField from '../../elements/text_field/text_field.component';
 import { ReactComponent as CheckIcon } from '../../icons/check.svg';
 import { ReactComponent as PencilIcon } from '../../icons/pencil.svg';
-import { IVotingProxy, VoterStatus, VotingData } from '../../utils/server_proxy/voting_proxy';
-import IVotingProxyFactory from '../../utils/server_proxy/voting_proxy_factory';
+import { IVotingProxy, VoterStatus, VotingData } from '../../networking/voting_proxy';
+import IVotingProxyFactory from '../../networking/voting_proxy_factory';
 import useInitialize from '../../utils/useInitialize';
 import CandidateList from './candidate_list.component';
 import FloatingPanel from './floating_panel.component';
@@ -41,6 +41,7 @@ export default function VotingPage({ votingProxyFactory }: VotingPageProps) {
   useEffect(() => {
     if (!votingData) return;
     setVotingEndTimeout();
+    orderedCandidates.current = votingData.candidates;
 
     function setVotingEndTimeout() {
       clearTimeout(votingEndTimeout.current);
